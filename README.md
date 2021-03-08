@@ -15,11 +15,10 @@ Over winter break my wife and I went to a graffiti workshop in Brooklyn where we
 * 2 Wine Glasses
 
 # Project Overview
-The project consisted of two scripts that communicated with each other serially:
+The project consisted of two scripts that allowed for serial Bluetooth communication between the Raspberry Pi and the ESP32:
 
-* An Arduino script that ran on the ESP32 that would take in all inputs from the user and either send data serially over to the processing script or move/control the raspberry pi's mouse serially.
-    
-* A processing script that would take in the user input data from the ESP32 and use it to run a Graffiti Art Simulator. To switch between drawing and not drawing, the user would have to toggle the SPDT switch (which controlled the left clicker of the mouse). To move the spray-paint can around the canvas the user would use the joystick. To clear the canvas the user would push the joystick's push-button. To change the color of the paint, the user would use the two push-buttons. One button was programmed to subtract 1 from the current hue value while the other would add 1 to the current hue value.n it would rain money symbols on fire.
+* An Arduino script that setup the ESP32 for serial Bluetooth communication with the Raspberry Pi. The ESP32 would acquire three input values from the user/environment; two capacitive touch sensors and one photoresistor. One capacitive touch sensor would sense for a "double tap" while the other touch sensor would sense for any touch occurrence. The photoresistor would sense the amount of light in its environment. While on, the ESP32 would send messages to the Raspberry Pi based on the current input values.
+* A python script that ran on the Raspberry Pi. The script would setup a connection over Bluetooth with the ESP32. Once the connection is made the Raspberry Pi would start receiving messages from the ESP32. These messages would be used to control both the fireplace and the music.
 
 # Running the Simulator
 In order to run this program, you first need to setup the hardware. Start by plugging in the ESP32 into the breadboard's GPIO at the top of the board. Then plug in the 2 push-buttons, the SPDT switch and the analog joystick into the GPIOS of your ESP32. Do this without obstructing your inputs with wires. Make sure that you plug the push-buttons and the switch into digital GPIO pins. Once the hardware is setup, edit any input pin numbers in the JoystickMouseControl.ino file to the GPIO pin numbers you used for your inputs. Then, load the file onto the ESP32 in the Arduino IDE. Open the serial monitor to check if your ESP32 is printing the proper values for your inputs. Then connect the ESP32 via a serial USB cable to the Raspberry Pi and turn it on. Finally, run the processing script, HI.pde, on the Raspberry Pi and start painting!
