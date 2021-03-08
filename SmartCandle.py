@@ -8,7 +8,7 @@ buf_size = 2048;
 
 # Create the client socket
 sock=BluetoothSocket(RFCOMM)
-sock.connect(('24:62:AB:FC:14:66', 1))
+sock.connect(('24:**:**:**:**:**', 1))
 print("connected")
 subprocess.Popen(['omxplayer','/home/pi/Downloads/Black.mp4'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE, close_fds=True)
 
