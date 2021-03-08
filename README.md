@@ -1,4 +1,5 @@
-## Smart Romantic Candle & Fireplace
+# Smart Romantic Candle & Fireplace
+
 # Artistic Vision
 Over winter break my wife and I went to a graffiti workshop in Brooklyn where we learnt about the history and beauty behind graffiti and even got to practice some of the different techniques that the pros use. It is actually a lot harder than it looks! We have been searching for another way to do more graffiti (legally, of course) at home and this project was the perfect solution.
 
