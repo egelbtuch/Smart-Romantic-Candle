@@ -1,26 +1,35 @@
 # Smart-Romantic-Candle
 # Artistic Vision
-During the pandemic I used my extra time to learn about the stock market. After investing in my first few stocks I found myself constantly checking my Robinhood app to see how my stocks were doing. After months of sweating over the ups and downs of my stocks, I was hoping to create a piece of generative art that would portray the volatility of the market and the volatility of my emotions. When my stocks go down, burning money would rain on my screen, and when my stocks go up, green money would rain down. In a way, my work takes you through the up and down feelings the market is always bringing me. I was also able to display these emotions, through my LEDs, when my stocks go up they would light up into a green smiley face, and when they go down, the LEDs would light up into a red upside down smiley face.
+Over winter break my wife and I went to a graffiti workshop in Brooklyn where we learnt about the history and beauty behind graffiti and even got to practice some of the different techniques that the pros use. It is actually a lot harder than it looks! We have been searching for another way to do more graffiti (legally, of course) at home and this project was the perfect solution.
 
 # Materials
 * Raspberry Pi 4B
-* 8 RGB LED Module
-* Female to Female Wires
+* ESP32-Wrover-Dev
+* Analog Joystick
+* Breadboard
+* 2 Push-buttons with Colored Caps
+* SPDT Switch
+* Bunch of Wires
 * 9V Lithium Ion Battery Pack
-* External Keyboard, Mouse & Monitor
+* External Monitor
 
 # Project Overview
-The project consisted of three scripts:
-  * Python script that would read-in an updated stock price every 60 seconds and compare it to the previous price. If the new price was bigger than the old price it would write a 1 in a seperate text file, if it was smaller it would write a 0 in that text file. It would also update a seperate text file with the current price.
-  * Another python script that would read the text file that had either a 0 or 1 in it and then turn on the LEDs to create a green smiley face if it was a 1 and a red upside down smiley face if it was a zero.
-  * Processing Script that would read both text files to both update the display with the current price and use the 0 or 1 to determine whether the stock had gone up or down. When the stock goes up it would rain green money symbols and when it went down it would rain money symbols on fire.
-# Processing
-Information about installing Processing on your Raspberry Pi can be found [here](https://pi.processing.org/download/).
-# NeoPixels
-A detailed guide to setting up the wiring and turning on the LEDs [here](https://learn.adafruit.com/neopixels-on-raspberry-pi/raspberry-pi-wiring).
-# Setting up the StockPi/Finnhub API
-A detailed guide can be found [here](https://github.com/pranshuchittora/stockpi).
-# Running on Boot
-In order to run all of my scripts on boot I created a shell file run.sh, that had calls to all three of my scripts in it. Then, I made the shell file executable using `sudo chmod +x run.sh.` so I could add it to a bash file. Finally, after opening the bash file using `sudo nano ~/.bashrc` I added a call at the bottom to the run.sh executable file, so it would run the shell file on boot.
+The project consisted of two scripts that communicated with each other serially:
+
+* An Arduino script that ran on the ESP32 that would take in all inputs from the user and either send data serially over to the processing script or move/control the raspberry pi's mouse serially.
+    
+* A processing script that would take in the user input data from the ESP32 and use it to run a Graffiti Art Simulator. To switch between drawing and not drawing, the user would have to toggle the SPDT switch (which controlled the left clicker of the mouse). To move the spray-paint can around the canvas the user would use the joystick. To clear the canvas the user would push the joystick's push-button. To change the color of the paint, the user would use the two push-buttons. One button was programmed to subtract 1 from the current hue value while the other would add 1 to the current hue value.n it would rain money symbols on fire.
+
+# Running the Simulator
+In order to run this program, you first need to setup the hardware. Start by plugging in the ESP32 into the breadboard's GPIO at the top of the board. Then plug in the 2 push-buttons, the SPDT switch and the analog joystick into the GPIOS of your ESP32. Do this without obstructing your inputs with wires. Make sure that you plug the push-buttons and the switch into digital GPIO pins. Once the hardware is setup, edit any input pin numbers in the JoystickMouseControl.ino file to the GPIO pin numbers you used for your inputs. Then, load the file onto the ESP32 in the Arduino IDE. Open the serial monitor to check if your ESP32 is printing the proper values for your inputs. Then connect the ESP32 via a serial USB cable to the Raspberry Pi and turn it on. Finally, run the processing script, HI.pde, on the Raspberry Pi and start painting!
+
+# Communicating Serially
+
+For the ESP32 to send data serially the script loaded on it must include `Serial.begin(9600)` in the setup. Everytime within the script you want to write data to the serial you use `Serial.write()`. To give your Raspberry Pi access to this data you must connect your Pi with a USB to your ESP32. In Processing, you have to add `import processing.serial.*` and `Serial myPort` to the top of your script. Then in setup you add `String portName = Serial.list()[1]` and `myPort = new Serial(this, portName, 9600)` specifing both the serial port you want to access and the baud rate being used to send the data. Then you can access the data coming in with something like `String val = myPort.readStringUntil('\n')`, depending on what the application is.
+
+# Technical Issues
+My main difficulty was figuring out how to use the joystick and a push-button as a USB mouse on the raspberry pi. After figuring that out I realized that the delays between each of my input's data-writes to serial was slowing the movements of the joystick mouse but without the delays the processing script was not reacting quick enough for the simulator to work smoothly. After a few iterations I found a good medium where neither thing was reacting too slowly to my inputs. Another issue that came up was that my 
+raspberry pi was getting very hot and therefore I decided not to put it inside the enclosure.
+
 # Video
-A video of my work can be found [here](https://www.youtube.com/watch?v=5K5YI9JsWlU).
+A video of my work can be found [here](https://www.youtube.com/watch?v=qQE452snG0A).
