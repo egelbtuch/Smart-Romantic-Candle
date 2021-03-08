@@ -8,8 +8,12 @@
 * Bunch of Wires (2 were used for capacitive touch sensors)
 * 9V Lithium Ion Battery Pack
 * External Monitor
+* Logitech Speakers
 * Bottle of Rosé
 * 2 Wine Glasses
+
+# What does it do?
+The candle-fireplace system turns "on" when the light in its environment drops below a specified threshold value. When the system turns "on" a few things will happen immediately. The candle's light will begin to flicker, a music playlist will start playing on the Raspberry Pi and a video of a fireplace will begin playing on the display. While, the system is "on" the ESP32 will check for a double tap/touch on the left aluminum foil side wall and for a press and hold on the right aluminum foil side wall. A double tap/touch will result in the Raspberry Pi changing the song to the next one in the playlist. While, a press and hold will change the volume of the music playing on the Raspberry Pi. If the light in the system's environment becomes larger than the threshold value everything will immediately shutoff and the display will go black. The system can be turned on and off continuously due to changes in light.
 
 # Project Overview
 The project consisted of two scripts that allowed for serial Bluetooth communication between the Raspberry Pi and the ESP32:
